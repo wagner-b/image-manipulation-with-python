@@ -1,7 +1,7 @@
 # image-manipulation-with-python
 Each `.py` file in this repository is a simple Python script to manipulate images and/or merge them in a PDF file, or even merge different PDF files in a single PDF file. They all work independently from each other. I tested them both on Windows and Linux, so they should work regardless of which is your operating system.
 
-In order to be able to run all these scrits, you need the Python packages `pillow` , `fpdf` and `pypdf2` installed. And of course, you need Python installed in your PATH. Some scripts here do not require all 3 packages. The comments inside each file clearly indicate which package(s) is(are) required. 
+In order to be able to run all these scrits, you need the Python packages `pillow` , `fpdf` and `pypdf2` installed. Some scripts here do not require all 3 packages. The comments inside each script clearly indicate which package(s) is(are) required. 
 
 All scripts here are free open-source software written by me. I'm sharing them here because I find them quite useful sometimes, especially if dealing with confidential or sensitive documents. If that's the case, maybe it isn't a good idea to send your data to a third-party server to manipulate it for you, since you can't be sure what it will do with your data. Since these scripts here are free and open-source software, you can look at the source code yourself, see that they aren't doing anything malicious with your data, and run them on your own machine.
 
