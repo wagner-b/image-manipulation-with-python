@@ -47,7 +47,7 @@ print()
 new_img_name = input('Type the name for the new image: ')
 
 # Resize the image, using an antialiasing for better quality
-new_pic = pic.resize((new_w, new_h), Image.ANTIALIAS)
+new_pic = pic.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
 # Save the image with optimization and 98% of quality
 new_pic.save(new_img_name + '.png', optimize = True, quality = 98)
