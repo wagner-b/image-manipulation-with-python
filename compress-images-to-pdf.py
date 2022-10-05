@@ -98,7 +98,7 @@ def compress_images(image_paths_list, fpath, image_type):
         pic = Image.open(image_paths_list[i])
         w, h = pic.size
         new_w, new_h = w//2, h//2
-        new_pic = pic.resize((new_w, new_h), Image.ANTIALIAS)
+        new_pic = pic.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
 
         if platform.startswith('win'):
