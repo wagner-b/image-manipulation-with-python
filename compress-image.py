@@ -28,29 +28,29 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-# To run this script, you need the python package 'pillow' installed
+# This script resizes (to half the original size) and compresses an image file,
+# while trying to maintain most of the original image quality.
+# To run this script, you need the python package 'pillow' installed.
 
 from PIL import Image
 
-print('Type the exact name of the image file, with the extension (like .jpg or .png)')
-print('The image should be in the same folder you are running this script')
-img_file = input('Image name: ')
+print('Type the exact name/path of the image, with extension (like .jpg or .png)')
+img_file = input(r"Original image: ")
 pic = Image.open(img_file)
 
 w, h = pic.size
-
-# To reduce the image size in half:
 new_w = int(w//2)
 new_h = int(h//2)
 
 print()
-new_img_name = input('Type the name for the new image: ')
+print('Type the name/path for the new compressed image, with the extension')
+new_img_name = input(r"New image: ")
 
 # Resize the image, using an antialiasing for better quality
 new_pic = pic.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
 # Save the image with optimization and 98% of quality
-new_pic.save(new_img_name + '.png', optimize = True, quality = 98)
+new_pic.save(new_img_name, optimize = True, quality = 98)
 
 pic.close()
 new_pic.close()
