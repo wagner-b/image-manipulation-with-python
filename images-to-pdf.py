@@ -1,6 +1,6 @@
 # BSD 3-Clause License
 #
-# Copyright (c) 2021, Wagner Bertholdo Burghausen
+# Copyright (c) 2023, Wagner Bertholdo Burghausen
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -28,79 +28,72 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-# Python script to merge images into one PDF file
+# This is a Python script to merge images into one PDF file
 
-# You need to put all images in a single folder, in the same directory
-# in which this script will be executed.
+# All images need to be in the same folder, and have the same extension
+# (e.g. all .png or all .jpg)
 
 # Rename all images in (alphabetical or numeric) order for the merging process.
-# All images should be of the same extension (e.g. all png or all jpg)
 
 # Each image will be a page of the PDF file, with the size of an A4
 # paper sheet in portrait mode, without margins.
 
-# You need to install the fpdf library before running this script
-# Example: ' pip install fpdf ' or ' pip3 install fpdf '
+# This script requires the fpdf or fpdf2 python package
+# Installation example: 'pip install fpdf' or 'pip3 install fpdf'
 
-###############################################
+######################################################
 
 import os
 from sys import platform
 from fpdf import FPDF
 
+print('Make sure images are named in (alphabetical or numeric) order')
+print('before proceeding.\n')
 
-# Get user input
+##### Get user input
 
-print('The folder containing the images to be merged needs to be in')
-print('the same directory this script is being executed.') 
-print('Rename the images in order for the merging process.')
-print()
-
-folder = input('Type the exact name of the folder containing the images: ')
+folder = input(r"""Type the folder name/path containing the images: """)
 fpath = os.path.abspath(folder)
 print()
 
-pdf_name = input('Type the name for the PDF file that will be generated: ') + '.pdf'
+# If folder doesn't exist, print error and exit
+if not os.path.exists(fpath):
+    print(f"Error! Folder {fpath} not found!")
+    print('Check if the name/path of the folder is correct (case sensitive).')
+    exit(1)
+
+pdf_name = input(r"""Type the name for the PDF file: """)
+if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
 
 image_type = input('Type the extension of your images (e.g. png, jpg): ')
-image_type = '.' + image_type
+if not image_type.startswith('.'): image_type = '.' + image_type
 print()
 
-###############################################
+######################################################
 
-if os.path.exists(fpath):
+###### Import images and generate the PDF file
 
-    # Creating the list with the paths of the image files
-    # Windows uses backward slash (\), other systems use forward slash (/)
-    if platform.startswith('win'):
-        image_list = [f"{fpath}\\{image}" for image in os.listdir(fpath)
-                      if image.endswith(image_type)]
-    else:
-        image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
-                      if image.endswith(image_type)]
+# Create the list with the paths of the image files
+image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
+                if image.endswith(image_type)]
+image_list.sort()
 
-    image_list.sort()
+print('Please wait...\n')
 
-    print('Please wait...')
-    print()
+# Create the PDF file and add the images
+pdf = FPDF()
+for image in image_list:
+    pdf.add_page()
+    pdf.image(image, 0, 0, 210, 297)
+    # 210 and 297 are the dimensions in mm of an A4 size sheet.
 
-    pdf = FPDF()
-    for image in image_list:
-        pdf.add_page()
-        pdf.image(image, 0, 0, 210, 297)
-        # 210 and 297 are the dimensions of an A4 size sheet.
+# Save the pdf file
+pdf.output(fpath + '/' + pdf_name)
 
-    # Save the pdf file
-    pdf.output(pdf_name, "F")
-
-    if platform.startswith('win'):
-        print(f"Done. The PDF file was saved as {os.path.abspath('')}\\{pdf_name}.")
-    else:
-        print(f"Done. The PDF file was saved as {os.path.abspath('')}/{pdf_name}.")
-
+# Print where the PDF file was saved.
+# Windows uses backward slash (\), other systems use forward slash (/).
+if platform.startswith('win'):
+    print(f"Done. The PDF file was saved as {fpath}\\{pdf_name}.")
 else:
-    print(f"folder {folder} not found.")
-    print('Check if the name of the folder is correct (case sensitive).')
-    print('The folder needs to be in the same directory of this script.')
-
+    print(f"Done. The PDF file was saved as {fpath}/{pdf_name}.")
