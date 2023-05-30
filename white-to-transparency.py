@@ -1,6 +1,6 @@
 # BSD 3-Clause License
 #
-# Copyright (c) 2021, Wagner Bertholdo Burghausen
+# Copyright (c) 2021-2023, Wagner Bertholdo Burghausen
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -49,18 +49,17 @@ pixels = img.getdata()
 new_data = list()
 
 print()
-print('Type the threshold value of the darkness / brightness you want to use')
-print('It needs to be an integer between 0 and 255')
-print('The higher the value, the closest it is to white')
-print('Suggested values: between 100 and 240, but it depends on your image')
-print('You can try different values until you get the desired result')
+print('Type the threshold value of darkness / brightness you want to replace')
+print('with 100% transparency. It needs to be an integer between 0 and 255.')
+print('The higher the value, the closest it is to white.')
+print('Suggested values: between 100 and 240, but it depends on your image.')
+print('You can try different values until you get the desired result.')
 threshold = int(input('Value: '))
-print()
+print('\nPlease wait...\n')
 
 # This loop appends only the darker pixels to the new list,
 # and replaces the brighter pixels with 100% transparency
 for pixel in pixels:
-
     if pixel[0] > threshold and pixel[1] > threshold and pixel[2] > threshold:
         new_data.append((255, 255, 255, 0))
     else:
@@ -69,8 +68,9 @@ for pixel in pixels:
 
 # Put the new pixels into the image and save it
 img.putdata(new_data)
-new_image = input(r"""Type the name/path for the new image: """)
-img.save(new_image + '.png')
+new_image = input(r"""Type the name/path to save the new image: """)
+if not new_image.endswith('.png'): new_image = new_image + '.png'
+img.save(new_image)
 
 # Close the image
 img.close()
