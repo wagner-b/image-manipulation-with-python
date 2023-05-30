@@ -35,7 +35,7 @@
 from PIL import Image
 
 print('Type the exact name/path of the image, with extension (like .jpg or .png)')
-img_file = input(r"Original image: ")
+img_file = input(r"""Original image: """)
 pic = Image.open(img_file)
 
 w, h = pic.size
@@ -44,7 +44,7 @@ new_h = int(h//2)
 
 print()
 print('Type the name/path for the new compressed image, with the extension')
-new_img_name = input(r"New image: ")
+new_img_name = input(r"""New image: """)
 
 # Resize the image, using an antialiasing for better quality
 new_pic = pic.resize((new_w, new_h), Image.Resampling.LANCZOS)
