@@ -34,9 +34,8 @@
 
 from PIL import Image
 
-print('Type the exact name of the image with the extension (like .png or .jpg)')
-print('Remember that the image needs to be in the same folder you are now')
-user_input = input('Image name: ')
+print('Type the exact image name/path with the extension (like .png or .jpg)')
+user_input = input(r"""Original image: """)
 
 img = Image.open(user_input)
 
@@ -70,7 +69,7 @@ for pixel in pixels:
 
 # Put the new pixels into the image and save it
 img.putdata(new_data)
-new_image = input('Type the name for the new image: ')
+new_image = input(r"""Type the name/path for the new image: """)
 img.save(new_image + '.png')
 
 # Close the image
