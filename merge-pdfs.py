@@ -1,6 +1,6 @@
 # BSD 3-Clause License
 #
-# Copyright (c) 2021, Wagner Bertholdo Burghausen
+# Copyright (c) 2021-2023, Wagner Bertholdo Burghausen
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -28,43 +28,43 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-# Python script to merge any amount of pdf files into one pdf file
+# This is a Python script to merge any amount of pdf files into one pdf file
 # To run this script, you need the python package 'pypdf2' installed
 
-# All the pdf files you want to merge need to be inside a folder
-# which need to be in the same folder where this script is.
+# All the pdf files you want to merge need to be inside the same folder
 # Rename all pdf files in alphabetical or numeric order before running this script.
 
 from os import path, listdir
 from sys import platform
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfMerger
 
-print('The folder containing the images to be merged needs to be in')
-print('the same directory this script is being executed.')
-print('Rename the pdfs in order for the merging process.')
-folder = input('Type the exact name of the folder containing the images: ')
+print('Make sure the PDFs are named in order for the merging process.')
+folder = input(r"""Type the folder name/path with the PDF files: """)
 fpath = path.abspath(folder)
+print()
 
-# Windows uses the backward slash (\), while other systems use the forward slash (/)
-if platform.startswith('win'):
-    pdfs = [f'{fpath}\\{pdf_file}' for pdf_file in listdir(fpath) if pdf_file.endswith('.pdf')]
-else:
-    pdfs = [f'{fpath}/{pdf_file}' for pdf_file in listdir(fpath) if pdf_file.endswith('.pdf')]
+# Create the list with the paths of the PDF files
+pdfs = [f"{fpath}/{pdf_file}" for pdf_file in listdir(fpath)
+        if pdf_file.endswith('.pdf')]
+
+# In case this script has already been run, remove the merged pdf
+for pdf in pdfs:
+    if pdf.endswith('all_pdfs_merged.pdf'): pdfs.remove(pdf)
 
 pdfs.sort()
 
-pdf_merger = PdfFileMerger()
-
+# Append all PDFs into one
+pdf_merger = PdfMerger()
 for pdf_file in pdfs:
     pdf_merger.append(open(pdf_file, 'rb'))
 
-# Writing and saving the final pdf file, with all pdfs merged
-with open('all_pdfs_merged.pdf', 'wb') as pdf_final:
+# Save the final pdf file, with all pdfs merged
+with open(f"{fpath}/all_pdfs_merged.pdf", 'wb') as pdf_final:
     pdf_merger.write(pdf_final)
 
-print()
-
+# Print where the PDF file was saved.
+# Windows uses the backward slash (\), other systems use the forward slash (/)
 if platform.startswith('win'):
-	print("Done. File saved as {}".format(path.abspath('') + '\\all_pdfs_merged.pdf'))
+	print(f"Done. File saved as {fpath}\\all_pdfs_merged.pdf")
 else:
-	print("Done. File saved as {}".format(path.abspath('') + '/all_pdfs_merged.pdf'))
+	print(f"Done. File saved as {fpath}/all_pdfs_merged.pdf")
