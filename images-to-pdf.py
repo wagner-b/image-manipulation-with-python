@@ -1,6 +1,6 @@
 # BSD 3-Clause License
 #
-# Copyright (c) 2023, Wagner Bertholdo Burghausen
+# Copyright (c) 2021-2023, Wagner Bertholdo Burghausen
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -59,7 +59,7 @@ print()
 # If folder doesn't exist, print error and exit
 if not os.path.exists(fpath):
     print(f"Error! Folder {fpath} not found!")
-    print('Check if the name/path of the folder is correct (case sensitive).')
+    print('Check if the folder name/path is correct.')
     exit(1)
 
 pdf_name = input(r"""Type the name for the PDF file: """)
@@ -76,7 +76,7 @@ print()
 
 # Create the list with the paths of the image files
 image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
-                if image.endswith(image_type)]
+              if image.endswith(image_type)]
 image_list.sort()
 
 print('Please wait...\n')
