@@ -62,12 +62,12 @@ if not os.path.exists(fpath):
     print('Check if the folder name/path is correct.')
     exit(1)
 
-pdf_name = input(r"""Type the name for the PDF file: """)
-if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
-print()
-
 image_type = input('Type the extension of your images (e.g. png, jpg): ')
 if not image_type.startswith('.'): image_type = '.' + image_type
+print()
+
+pdf_name = input(r"""Type the name for the PDF file: """)
+if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
 
 ######################################################
