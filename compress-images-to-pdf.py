@@ -40,9 +40,6 @@
 # Each image will be a page of the PDF file, with the size of an A4
 # paper sheet in portrait mode, without margins.
 
-# The images will be compressed to less than 1/3 of their original file size
-# (bytes), while still maintaining most of the original image quality.
-
 # This script requires the python packages pillow and fpdf (or fpdf2)
 
 ###############################################
@@ -54,26 +51,17 @@ from fpdf import FPDF
 
 def compress_images(image_paths_list, fpath):
     """
-    This function opens all images in a specified folder, and
-    then compresses them and saves them in a new folder called
-    'compressed_images', inside the specified folder.
+    This function opens all images in a specified folder, and then
+    reduces them to half their size, and saves them in a new folder
+    called 'compressed_images', inside the specified folder.
 
     Required input variables:
 
-    `image_paths_list`: A list of strings with the complete paths of all
-    the images to be compressed.
+    `image_paths_list`: A list of strings in which each string is
+    the absolute path of an image file.
 
-    `fpath`: A string indicating the complete path of the folder
-    which contains all the images that will be compressed.
-
-    This function will create compressed images with 1/2 (half) of
-    the image resolution scale, and with less than 1/3 (one third)
-    of the original image file size (bytes), while preserving most
-    of the image quality.
-
-    If you need even smaller image files, you could reduce the
-    the value of the 'quality' parameter, though this would lower
-    the image quality.
+    `fpath`: A string indicating the absolute path of the folder
+    that contains the itens in `image_paths_list`.
     """
 
     from os import mkdir
