@@ -1,6 +1,6 @@
 # BSD 3-Clause License
 #
-# Copyright (c) 2021, Wagner Bertholdo Burghausen
+# Copyright (c) 2021-2023, Wagner Bertholdo Burghausen
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -28,13 +28,11 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-# Python script to create a single compressed PDF file from a set of images
-
-# You need to put all images in a single folder, in the same directory
-# in which this script will be executed.
+# This is a Python script to create a single PDF file from a set of images
 
 # Rename all images in (alphabetical or numeric) order for the merging process.
-# All images should be of the same extension (e.g. all png or all jpg)
+# All images should be in the same folder, with the same extension
+# (e.g. all png or all jpg)
 
 # The images will be compressed and saved with a different name, and then
 # the new compressed images will be merged into one pdf file.
@@ -45,7 +43,7 @@
 # The images will be compressed to less than 1/3 of their original file size
 # (bytes), while still maintaining most of the original image quality.
 
-# The python packages pillow and fpdf are required for this script to work!
+# This script requires the python packages pillow and fpdf (or fpdf2)
 
 ###############################################
 
@@ -54,9 +52,7 @@ from sys import platform
 from fpdf import FPDF
 
 
-# Function definition
-
-def compress_images(image_paths_list, fpath, image_type):
+def compress_images(image_paths_list, fpath):
     """
     This function opens all images in a specified folder, and
     then compresses them and saves them in a new folder called
@@ -69,9 +65,6 @@ def compress_images(image_paths_list, fpath, image_type):
 
     `fpath`: A string indicating the complete path of the folder
     which contains all the images that will be compressed.
-
-    `image_type`: A string indicating the extension type of the images
-    (e.g. '.png' or '.jpg')
 
     This function will create compressed images with 1/2 (half) of
     the image resolution scale, and with less than 1/3 (one third)
@@ -87,107 +80,81 @@ def compress_images(image_paths_list, fpath, image_type):
     from PIL import Image
     from sys import platform
 
+    # Get the extension of the images
+    image_ext = '.' + image_paths_list[0].split('.')[-1]
+    
     # Creating the compressed_images folder
-    # Windows uses the backward slash (\), other systems use the forward slash (/)
-    if platform.startswith('win'):
-        mkdir(fpath + '\\compressed_images')
-    else:
-        mkdir(fpath + '/compressed_images')
+    mkdir(fpath + '/compressed_images')
 
+    # Open each image, resize, compress, and save it
     for i in range(len(image_paths_list)):
         pic = Image.open(image_paths_list[i])
         w, h = pic.size
         new_w, new_h = w//2, h//2
         new_pic = pic.resize((new_w, new_h), Image.Resampling.LANCZOS)
+        new_pic.save(fpath + '/compressed_images' +
+                     f"/compressed_image_{i+1:04d}" + image_ext,
+                     optimize=True, quality=90)
 
-
-        if platform.startswith('win'):
-            new_pic.save(fpath + '\\compressed_images' +
-                         f"\\compressed_image_{i+1:04d}" + image_type,
-                         optimize=True, quality=90)
-        else:
-            new_pic.save(fpath + '/compressed_images' +
-                         f"/compressed_image_{i+1:04d}" + image_type,
-                         optimize=True, quality=90)
-
-    print("All images were compressed and saved!")
+    # Windows uses the backward slash (\), other systems use the forward slash (/)
     if platform.startswith('win'):
-        print(f"The compressed JPG images were saved in {fpath}\\compressed_images")
+        print(f"The compressed images were saved in {fpath}\\compressed_images\n")
     else:
-        print(f"The compressed JPG images were saved in {fpath}/compressed_images")
-    print()
+        print(f"The compressed images were saved in {fpath}/compressed_images\n")
+
 
 ###############################################
 
-# Get user input
+### Get user input
 
-print('The folder containing the images to be merged needs to be in')
-print('the same directory this script is being executed.') 
-print('Rename the images in order for the merging process.')
-print()
+print('Make sure the images are named in order for the merging process.\n')
 
-folder = input('Type the exact name of the folder containing the images: ')
+folder = input(r"""Type the folder name/path containing the images: """)
 fpath = os.path.abspath(folder)
 print()
 
-pdf_name = input('Type the name for the PDF file that will be generated: ') + '.pdf'
+if not os.path.exists(fpath):
+    print(f"Error! Folder {fpath} not found!")
+    print('Check if the folder path is correct.')
+    exit(1)
+
+pdf_name = input(r"""Type the name for the PDF file that will be generated: """)
+if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
 
-image_type = input('Type the extension of your images (e.g. png, jpg): ')
-image_type = '.' + image_type
+image_ext = input('Type the extension of your images (e.g. png, jpg): ')
+if not image_ext.startswith('.'): image_ext = '.' + image_ext
 print()
 
 ###############################################
 
-# Main script
+### Main script
 
-if os.path.exists(fpath):
+# Creating the list with the paths of the image files
+image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
+              if image.endswith(image_ext)]
+image_list.sort()
 
-    # Creating the list with the paths of the image files
-    # Windows uses backward slash (\), other systems use forward slash (/)
-    if platform.startswith('win'):
-        image_list = [f"{fpath}\\{image}" for image in os.listdir(fpath)
-                      if image.endswith(image_type)]
-    else:
-        image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
-                      if image.endswith(image_type)]
+print('Compressing and saving images, please wait...\n')
+compress_images(image_list, fpath)
 
-    image_list.sort()
+# Creating a list with only the newly created compressed images
+compressed = [f"{fpath}/compressed_images/{image}" for image in
+              os.listdir(fpath + '/compressed_images')]
+compressed.sort()
 
-    print('Compressing and saving images, please wait...')
-    print()
+print('Creating the PDF file, please wait...\n')
+pdf = FPDF()
+for image in compressed:
+    pdf.add_page()
+    pdf.image(image, 0, 0, 210, 297)
+    # 210 and 297 are the dimensions of an A4 size sheet.
 
-    compress_images(image_list, fpath, image_type)
+# Save the pdf file
+pdf.output(fpath + '/' + pdf_name)
 
-    # Creating a list with only the newly created compressed images
-    if platform.startswith('win'):
-        compressed = [f"{fpath}\\compressed_images\\{image}" for image in
-                      os.listdir(fpath + '\\compressed_images')]
-    else:
-        compressed = [f"{fpath}/compressed_images/{image}" for image in
-                      os.listdir(fpath + '/compressed_images')]
-
-    compressed.sort()
-
-    print('Creating the PDF file, please wait...')
-    print()
-
-    pdf = FPDF()
-    for image in compressed:
-        pdf.add_page()
-        pdf.image(image, 0, 0, 210, 297)
-        # 210 and 297 are the dimensions of an A4 size sheet.
-
-    # Save the pdf file
-    pdf.output(pdf_name, "F")
-
-    if platform.startswith('win'):
-        print(f"Done. The PDF file was saved as {os.path.abspath('')}\\{pdf_name}.")
-    else:
-        print(f"Done. The PDF file was saved as {os.path.abspath('')}/{pdf_name}.")
-
+# Windows uses backward slash (\), other systems use forward slash (/)
+if platform.startswith('win'):
+    print(f"Done. The PDF file was saved as {fpath}\\{pdf_name}.")
 else:
-    print(f"folder {folder} not found.")
-    print('Check if the name of the folder is correct (case sensitive).')
-    print('The folder needs to be in the same directory of this script.')
-
+    print(f"Done. The PDF file was saved as {fpath}/{pdf_name}.")
