@@ -106,12 +106,12 @@ if not os.path.exists(fpath):
     print('Check if the folder path is correct.')
     exit(1)
 
-pdf_name = input(r"""Type the name for the PDF file that will be generated: """)
-if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
-print()
-
 image_ext = input('Type the extension of your images (e.g. png, jpg): ')
 if not image_ext.startswith('.'): image_ext = '.' + image_ext
+print()
+
+pdf_name = input(r"""Type the name for the PDF file that will be generated: """)
+if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
 
 ###############################################
