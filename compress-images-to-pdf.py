@@ -97,7 +97,7 @@ def compress_images(image_paths_list, fpath):
 
 print('Make sure the images are named in order for the merging process.\n')
 
-folder = input(r"""Type the folder name/path containing the images: """)
+folder = input("Type the folder name/path containing the images: ")
 fpath = os.path.abspath(folder)
 print()
 
@@ -110,7 +110,7 @@ image_ext = input('Type the extension of your images (e.g. png, jpg): ')
 if not image_ext.startswith('.'): image_ext = '.' + image_ext
 print()
 
-pdf_name = input(r"""Type the name for the PDF file that will be generated: """)
+pdf_name = input("Type the name for the PDF file that will be generated: ")
 if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
 
