@@ -52,7 +52,7 @@ print('before proceeding.\n')
 
 ##### Get user input
 
-folder = input(r"""Type the folder name/path containing the images: """)
+folder = input("Type the folder name/path containing the images: ")
 fpath = os.path.abspath(folder)
 print()
 
@@ -66,7 +66,7 @@ image_type = input('Type the extension of your images (e.g. png, jpg): ')
 if not image_type.startswith('.'): image_type = '.' + image_type
 print()
 
-pdf_name = input(r"""Type the name for the PDF file: """)
+pdf_name = input("Type the name for the PDF file: ")
 if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
 
