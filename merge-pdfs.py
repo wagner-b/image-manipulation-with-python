@@ -39,7 +39,7 @@ from sys import platform
 from PyPDF2 import PdfMerger
 
 print('Make sure the PDFs are named in order for the merging process.')
-folder = input(r"""Type the folder name/path with the PDF files: """)
+folder = input("Type the folder name/path with the PDF files: ")
 fpath = path.abspath(folder)
 print()
 
