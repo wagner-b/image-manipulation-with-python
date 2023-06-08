@@ -34,17 +34,16 @@
 # All the pdf files you want to merge need to be inside the same folder
 # Rename all pdf files in alphabetical or numeric order before running this script.
 
-from os import path, listdir
-from sys import platform
+import os
 from PyPDF2 import PdfMerger
 
 print('Make sure the PDFs are named in order for the merging process.')
 folder = input("Type the folder name/path with the PDF files: ")
-fpath = path.abspath(folder)
+fpath = os.path.abspath(folder)
 print()
 
 # Create the list with the paths of the PDF files
-pdfs = [f"{fpath}/{pdf_file}" for pdf_file in listdir(fpath)
+pdfs = [f"{fpath}/{pdf_file}" for pdf_file in os.listdir(fpath)
         if pdf_file.endswith('.pdf')]
 
 # In case this script has already been run, remove the merged pdf
@@ -62,5 +61,4 @@ for pdf_file in pdfs:
 with open(f"{fpath}/all_pdfs_merged.pdf", 'wb') as pdf_final:
     pdf_merger.write(pdf_final)
 
-# Print where the PDF file was saved.
-print("Done. File saved as:", path.join(fpath, 'all_pdfs_merged.pdf'))
+print("Done. File saved as:", os.path.join(fpath, 'all_pdfs_merged.pdf'))
