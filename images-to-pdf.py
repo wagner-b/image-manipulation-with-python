@@ -92,8 +92,4 @@ for image in image_list:
 pdf.output(fpath + '/' + pdf_name)
 
 # Print where the PDF file was saved.
-# Windows uses backward slash (\), other systems use forward slash (/).
-if platform.startswith('win'):
-    print(f"Done. The PDF file was saved as {fpath}\\{pdf_name}.")
-else:
-    print(f"Done. The PDF file was saved as {fpath}/{pdf_name}.")
+print("Done. PDF file saved as:", os.path.join(fpath, pdf_name))
