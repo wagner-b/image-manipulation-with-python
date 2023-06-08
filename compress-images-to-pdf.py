@@ -45,7 +45,6 @@
 ###############################################
 
 import os
-from sys import platform
 from fpdf import FPDF
 
 
@@ -64,15 +63,14 @@ def compress_images(image_paths_list, fpath):
     that contains the itens in `image_paths_list`.
     """
 
-    from os import mkdir
+    import os
     from PIL import Image
-    from sys import platform
 
     # Get the extension of the images
     image_ext = '.' + image_paths_list[0].split('.')[-1]
     
     # Creating the compressed_images folder
-    mkdir(fpath + '/compressed_images')
+    os.mkdir(fpath + '/compressed_images')
 
     # Open each image, resize, compress, and save it
     for i in range(len(image_paths_list)):
@@ -82,13 +80,10 @@ def compress_images(image_paths_list, fpath):
         new_pic = pic.resize((new_w, new_h), Image.Resampling.LANCZOS)
         new_pic.save(fpath + '/compressed_images' +
                      f"/compressed_image_{i+1:04d}" + image_ext,
-                     optimize=True, quality=90)
+                     optimize=True, quality=95)
 
-    # Windows uses the backward slash (\), other systems use the forward slash (/)
-    if platform.startswith('win'):
-        print(f"The compressed images were saved in {fpath}\\compressed_images\n")
-    else:
-        print(f"The compressed images were saved in {fpath}/compressed_images\n")
+    print("Compressed images saved in:",
+          os.path.join(fpath, 'compressed_images'), '\n')
 
 
 ###############################################
@@ -141,8 +136,4 @@ for image in compressed:
 # Save the pdf file
 pdf.output(fpath + '/' + pdf_name)
 
-# Windows uses backward slash (\), other systems use forward slash (/)
-if platform.startswith('win'):
-    print(f"Done. The PDF file was saved as {fpath}\\{pdf_name}.")
-else:
-    print(f"Done. The PDF file was saved as {fpath}/{pdf_name}.")
+print("Done. PDF file saved as:", os.path.join(fpath, pdf_name))
