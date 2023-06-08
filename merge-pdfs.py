@@ -63,8 +63,4 @@ with open(f"{fpath}/all_pdfs_merged.pdf", 'wb') as pdf_final:
     pdf_merger.write(pdf_final)
 
 # Print where the PDF file was saved.
-# Windows uses the backward slash (\), other systems use the forward slash (/)
-if platform.startswith('win'):
-	print(f"Done. File saved as {fpath}\\all_pdfs_merged.pdf")
-else:
-	print(f"Done. File saved as {fpath}/all_pdfs_merged.pdf")
+print("Done. File saved as:", path.join(fpath, 'all_pdfs_merged.pdf'))
