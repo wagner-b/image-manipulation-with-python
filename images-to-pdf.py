@@ -44,7 +44,6 @@
 ######################################################
 
 import os
-from sys import platform
 from fpdf import FPDF
 
 print('Make sure images are named in (alphabetical or numeric) order')
@@ -91,5 +90,4 @@ for image in image_list:
 # Save the pdf file
 pdf.output(fpath + '/' + pdf_name)
 
-# Print where the PDF file was saved.
 print("Done. PDF file saved as:", os.path.join(fpath, pdf_name))
