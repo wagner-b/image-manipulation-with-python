@@ -46,7 +46,7 @@ print()
 pdfs = [f"{fpath}/{pdf_file}" for pdf_file in os.listdir(fpath)
         if pdf_file.endswith('.pdf')]
 
-# In case this script has already been run, remove the merged pdf
+# In case this script has already been executed, remove the merged pdf
 for pdf in pdfs:
     if pdf.endswith('all_pdfs_merged.pdf'): pdfs.remove(pdf)
 
