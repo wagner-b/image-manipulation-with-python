@@ -42,6 +42,7 @@
 # Installation example: 'pip install fpdf' or 'pip3 install fpdf'
 
 ######################################################
+##### Get user input
 
 import os
 from fpdf import FPDF
@@ -49,36 +50,37 @@ from fpdf import FPDF
 print('Make sure images are named in (alphabetical or numeric) order')
 print('before proceeding.\n')
 
-##### Get user input
-
 folder = input("Type the folder name/path containing the images: ")
 fpath = os.path.abspath(folder)
 print()
 
-# If folder doesn't exist, print error and exit
 if not os.path.exists(fpath):
     print(f"Error! Folder {fpath} not found!")
     print('Check if the folder name/path is correct.')
     exit(1)
 
-image_type = input('Type the extension of your images (e.g. png, jpg): ')
-if not image_type.startswith('.'): image_type = '.' + image_type
+image_ext = input('Type the extension of your images (e.g. png, jpg): ')
+if not image_ext.startswith('.'): image_ext = '.' + image_ext
 print()
+
+# Create the list with the paths of the image files
+image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
+              if image.endswith(image_ext)]
+
+if not image_list:
+    print(f"Error! No {image_ext} images were found in {fpath}")
+    print('Exiting')
+    exit(1)
 
 pdf_name = input("Type the name for the PDF file: ")
 if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
 
 ######################################################
-
-###### Import images and generate the PDF file
-
-# Create the list with the paths of the image files
-image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
-              if image.endswith(image_type)]
-image_list.sort()
+###### Main script
 
 print('Please wait...\n')
+image_list.sort()
 
 # Create the PDF file and add the images
 pdf = FPDF()
