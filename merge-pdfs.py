@@ -50,6 +50,11 @@ pdfs = [f"{fpath}/{pdf_file}" for pdf_file in os.listdir(fpath)
 for pdf in pdfs:
     if pdf.endswith('all_pdfs_merged.pdf'): pdfs.remove(pdf)
 
+if not pdfs:
+    print(f"Error! No PDF file was found in {fpath}")
+    print('Exiting')
+    exit(1)
+
 pdfs.sort()
 
 # Append all PDFs into one
