@@ -69,7 +69,7 @@ def compress_images(image_paths_list, fpath):
     # Get the extension of the images
     image_ext = '.' + image_paths_list[0].split('.')[-1]
     
-    # Creating the compressed_images folder
+    # Create the compressed_images folder
     os.mkdir(fpath + '/compressed_images')
 
     # Open each image, resize, compress, and save it
@@ -105,6 +105,15 @@ image_ext = input('Type the extension of your images (e.g. png, jpg): ')
 if not image_ext.startswith('.'): image_ext = '.' + image_ext
 print()
 
+# Create the list with the paths of the image files
+image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
+              if image.endswith(image_ext)]
+
+if not image_list:
+    print(f"Error! No {image_ext} images were found in {fpath}")
+    print('Exiting')
+    exit(1)
+
 pdf_name = input("Type the name for the PDF file that will be generated: ")
 if not pdf_name.endswith('.pdf'): pdf_name = pdf_name + '.pdf'
 print()
@@ -113,15 +122,12 @@ print()
 
 ### Main script
 
-# Creating the list with the paths of the image files
-image_list = [f"{fpath}/{image}" for image in os.listdir(fpath)
-              if image.endswith(image_ext)]
 image_list.sort()
 
 print('Compressing and saving images, please wait...\n')
 compress_images(image_list, fpath)
 
-# Creating a list with only the newly created compressed images
+# Create a list with only the newly created compressed images
 compressed = [f"{fpath}/compressed_images/{image}" for image in
               os.listdir(fpath + '/compressed_images')]
 compressed.sort()
